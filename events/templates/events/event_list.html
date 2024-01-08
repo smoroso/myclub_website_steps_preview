@@ -5,6 +5,7 @@
 <h1>Events</h1>
 <br/>
 {% for event in event_list %}
+    {% if event.approved %}
     <div class="card">
         <div class="card-header">{{ event }}</div>
         <div class="card-body">
@@ -33,6 +34,9 @@
                         <strong>Description:</strong> {{ event.description }}
                     </li>
                     <li>
+                        <strong>Approved:</strong> {{ event.approved }}
+                    </li>
+                    <li>
                         <strong>Attendees:</strong>
                         <ul>
                         {% for user in event.attendees.all %}
@@ -54,6 +58,7 @@
         {% endif %}
     </div>
     <br/>
+    {% endif %}
 {% endfor %}
 
 {% endblock %}
