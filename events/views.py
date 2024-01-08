@@ -4,16 +4,18 @@ from calendar import HTMLCalendar
 from datetime import datetime
 from django.http import HttpResponseRedirect
 from .models import Event, Venue
+from django.contrib.auth.models import User
 from .forms import VenueForm, EventForm, EventFormAdmin
 from django.http import HttpResponse
 import csv
+from django.contrib import messages
 
+# Import PDF Stuff
 from django.http import FileResponse
 import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
-from django.contrib import messages
 
 # Import Pagination Stuff
 from django.core.paginator import Paginator
@@ -181,8 +183,10 @@ def search_venues(request):
 
 def show_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
+    venue_owner = User.objects.get(pk=venue.owner)
     return render(request, "events/show_venue.html", {
         "venue": venue,
+        "venue_owner": venue_owner,
     })
 
 
