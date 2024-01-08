@@ -253,7 +253,7 @@ def add_venue(request):
 
 
 def all_events(request):
-    event_list = Event.objects.all().order_by("event_date", "-name", "venue")
+    event_list = Event.objects.all().order_by("-event_date", "-name", "venue")
     return render(request, "events/event_list.html", {
         "event_list": event_list,
     })
