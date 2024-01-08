@@ -7,7 +7,44 @@
         <h1>You Searched For {{ searched }}</h1>
         <br/>
         {% for venue in venues %}
-            <a href="{% url 'show-venue' venue.id %}">{{ venue }}</a><br/>
+            <div class="card">
+                <div class="card-header">
+                    <a href="{% url 'show-venue' venue.id %}">{{ venue }}</a>
+                </div>
+                <div class="card-body">
+                <h5 class="card-title">Address: {{ venue.address }}</h5>
+                <p class="card-text">
+                <ul style="list-style: none;">
+                    {% if venue.zip_code %}
+                    <li>
+                    <strong>Zip Code:</strong> {{ venue.zip_code }}
+                    </li>
+                    {% endif %}
+                    {% if venue.phone %}
+                    <li>
+                    <strong>Phone:</strong> {{ venue.phone }}
+                    </li>
+                    {% endif %}
+                    {% if venue.web %}
+                    <li>
+                    <strong>Web:</strong> <a href="{{ venue.web }}">{{ venue.web }}</a>
+                    </li>
+                    {% endif %}
+                    {% if venue.email_address %}
+                    <li>
+                    <strong>Email:</strong> {{ venue.email_address }}
+                    </li>
+                    {% endif %}
+                    {% if venue.owner %}
+                    <li>
+                    <strong>Owner:</strong> {{ venue.owner }}
+                    </li>
+                    {% endif %}
+                </ul>
+                </p>
+                </div>
+            </div>
+            <br/>
         {% endfor %}
     {% else %}
         <h1>Hey! You Forgot To Search For A Venue...</h1>
