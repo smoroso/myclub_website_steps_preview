@@ -21,6 +21,29 @@ from reportlab.lib.pagesizes import letter
 from django.core.paginator import Paginator
 
 
+# Create Admin Event Approval Page
+def admin_approval(request):
+    event_list = Event.objects.all().order_by("-event_date")
+    if request.user.is_superuser:
+        if request.method == "POST":
+            id_list = request.POST.getlist("boxes")
+            # Uncheck all events (Hacky)
+            event_list.update(approved=False)
+            # Update the database
+            for x in id_list:
+                Event.objects.filter(pk=int(x)).update(approved=True)
+            messages.success(request, ("Event List Approval has been updated"))
+            return redirect("list-events")
+        else:
+            return render(request, "events/admin_approval.html", {
+                "event_list": event_list,
+            })
+    else:
+        messages.success(request, ("You aren't authorized to view this page"))
+        return redirect("home")
+    return render(request, "events/admin_approval.html", {})
+
+
 # Create My Events Page
 def my_events(request):
     if request.user.is_authenticated:
