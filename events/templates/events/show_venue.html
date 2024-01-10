@@ -30,6 +30,16 @@
         <img src="{{ venue.venue_image.url}}" alt="Venue Image" width="480"/>
       {% endif %}
       </p>
+      <br/>
+      <h3>Events a this Venue...</h3>
+      {% if events %}
+        {% for event in events %}
+          <a href="{% url 'show-event' event.id %}">{{ event }}</a><br/>
+        {% endfor %}
+      {% else %}
+        No Events scheduleda at this time
+      {% endif %}
+      <br/><br/>
     </div>
   </div>
 </center>
