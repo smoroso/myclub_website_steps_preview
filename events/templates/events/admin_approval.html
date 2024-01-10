@@ -3,7 +3,19 @@
 {% block content %}
 
 <center>
-    <h1>Admin Event Approval Portal</h1>
+    <h1>Admin Dashboard</h1>
+    <div class="card">
+        <div class="card-header">
+            Event - Venue - User count list
+        </div>
+        <div class="card-body">
+            EventCount: {{ event_count}}<br/>
+            VenuesCount: {{ venue_count}}<br/>
+            UserCount: {{ user_count}}<br/>
+        </div>
+    </div>
+
+    <h1>Event Approval Form</h1>
     <form action="" method="POST">
         {% csrf_token %}
         <table class="table table-bordered table-hover table-striped">

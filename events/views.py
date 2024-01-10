@@ -23,6 +23,11 @@ from django.core.paginator import Paginator
 
 # Create Admin Event Approval Page
 def admin_approval(request):
+    # Get counts
+    event_count = Event.objects.all().count()
+    venue_count = Venue.objects.all().count()
+    user_count = User.objects.all().count()
+
     event_list = Event.objects.all().order_by("-event_date")
     if request.user.is_superuser:
         if request.method == "POST":
@@ -37,6 +42,9 @@ def admin_approval(request):
         else:
             return render(request, "events/admin_approval.html", {
                 "event_list": event_list,
+                "event_count": event_count,
+                "venue_count": venue_count,
+                "user_count": user_count,
             })
     else:
         messages.success(request, ("You aren't authorized to view this page"))
