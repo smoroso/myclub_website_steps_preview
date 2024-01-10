@@ -15,6 +15,28 @@
         </div>
     </div>
 
+    <br/><br/>
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Venue Name</th>
+                <th scope="col">Events</th>
+            </tr>
+        </thead>
+        {% for venue in venue_list %}
+        <tbody>
+            <tr>
+                <td>
+                    <a href="{% url 'show-venue' venue.id %}">{{venue}}</a>
+                </td>
+                <td>
+                    <a href="{% url 'venue-events' venue.id %}" class="btn btn-sm btn-secondary">List Events</a>
+                </td>
+            </tr>
+        </tbody>
+    {% endfor %}
+    </table>
+
     <h1>Event Approval Form</h1>
     <form action="" method="POST">
         {% csrf_token %}
