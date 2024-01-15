@@ -3,9 +3,10 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from django.http import HttpResponseRedirect
-from .models import Event, Venue
+from .models import Event, Venue, Star
 from django.contrib.auth.models import User
 from .forms import VenueForm, EventForm, EventFormAdmin
+from formtools.preview import FormPreview
 from django.http import HttpResponse
 import csv
 from django.contrib import messages
@@ -20,6 +21,15 @@ from reportlab.lib.pagesizes import letter
 # Import Pagination Stuff
 from django.core.paginator import Paginator
 
+
+# Add Star
+class StarFormPreview(FormPreview):
+    form_template = 'events/add_star.html'
+    preview_template = 'events/add_star_preview.html'
+
+    def done(self, request, cleaned_data):
+        Star.objects.create(**cleaned_data)
+        return HttpResponse("Form submitted")
 
 # Show Event
 def show_event(request, event_id):

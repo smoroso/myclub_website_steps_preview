@@ -1,6 +1,12 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Venue, Event
+from .models import Venue, Event, Star
+
+# Star
+class StarForm(forms.ModelForm):
+    class Meta:
+        model = Star
+        fields = ('first_name', 'last_name', 'email', 'phone')
 
 # Admin SuperUser Event Form
 class EventFormAdmin(ModelForm):
