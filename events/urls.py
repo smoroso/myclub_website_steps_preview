@@ -23,5 +23,6 @@ urlpatterns = [
     path("admin_approval", views.admin_approval, name="admin_approval"),
     path("venue_events/<venue_id>", views.venue_events, name="venue-events"),
     path("show_event/<event_id>", views.show_event, name="show-event"),
-    path("add_star", views.StarFormPreview(StarForm))
+    path("add_star", views.StarFormPreview(StarForm), name="add_star"),
+    path("list_stars", views.list_stars, name="list_stars"),
 ]

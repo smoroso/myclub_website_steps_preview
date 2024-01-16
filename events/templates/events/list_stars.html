@@ -1,0 +1,48 @@
+{% extends "events/base.html" %}
+
+{% block content %}
+
+<center>
+  <h1>Stars...</h1>
+
+  <table class="table table-bordered table-hover table-striped">
+    {% for star in stars %}
+    <tr>
+      <td>
+        {{ star }}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <br/><br/>
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      {% if stars.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1">&laquo First</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ stars.previous_page_number }}">Previous</a>
+        </li>
+      {% endif %}
+
+      {% for page in stars.paginator.page_range %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+        </li>
+      {% endfor %}
+
+      {% if stars.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ stars.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ stars.paginator.num_pages }}">&raquo Last</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+</center>
+
+{% endblock %}

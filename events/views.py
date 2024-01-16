@@ -24,12 +24,29 @@ from django.core.paginator import Paginator
 
 # Add Star
 class StarFormPreview(FormPreview):
-    form_template = 'events/add_star.html'
-    preview_template = 'events/add_star_preview.html'
+    form_template = "events/add_star.html"
+    preview_template = "events/add_star_preview.html"
 
     def done(self, request, cleaned_data):
         Star.objects.create(**cleaned_data)
-        return HttpResponse("Form submitted")
+        messages.success(request, ("Form submitted; Star entry added"))
+        return redirect("list_stars")
+
+# List Stars
+def list_stars(request):
+    star_list = Star.objects.all()
+
+    # Set up pagination
+    p = Paginator(Star.objects.all(), 10)
+    page = request.GET.get("page")
+    stars = p.get_page(page)
+    nums = "a" * stars.paginator.num_pages
+
+    return render(request, "events/list_stars.html", {
+        "star_list": star_list,
+        "stars": stars,
+        "nums": nums,
+    })
 
 # Show Event
 def show_event(request, event_id):
@@ -50,7 +67,7 @@ def venue_events(request, venue_id):
         })
     else:
         messages.success(request, ("That venue has no events"))
-        return redirect('admin_approval')
+        return redirect("admin_approval")
 
 
 # Create Admin Event Approval Page
@@ -98,7 +115,7 @@ def my_events(request):
         })
     else:
         messages.success(request, ("You aren't authorized to View this page"))
-        return redirect('home')
+        return redirect("home")
 
 # Generate a PDF File Venue List
 def venue_pdf(request):
@@ -180,17 +197,17 @@ def venue_text(request):
 def delete_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
     venue.delete()
-    return redirect('list-venues')
+    return redirect("list-venues")
 
 def delete_event(request, event_id):
     event = Event.objects.get(pk=event_id)
     if request.user == event.manager:
         event.delete()
         messages.success(request, ("Event Deleted!"))
-        return redirect('list-events')
+        return redirect("list-events")
     else:
         messages.success(request, ("You aren't authorized to delete this event"))
-        return redirect('list-events')
+        return redirect("list-events")
 
 def add_event(request):
     submitted = False
@@ -213,7 +230,7 @@ def add_event(request):
             form = EventFormAdmin
         else:
             form = EventForm
-        if 'submitted' in request.GET:
+        if "submitted" in request.GET:
             submitted = True
 
     return render(request, "events/add_event.html", {
@@ -230,7 +247,7 @@ def update_event(request, event_id):
 
     if form.is_valid():
         form.save()
-        return redirect('list-events')
+        return redirect("list-events")
     return render(request, "events/update_event.html", {
         "event": event,
         "form": form,
@@ -241,7 +258,7 @@ def update_venue(request, venue_id):
     form = VenueForm(request.POST or None, request.FILES or None, instance=venue)
     if form.is_valid():
         form.save()
-        return redirect('list-venues')
+        return redirect("list-venues")
     return render(request, "events/update_venue.html", {
         "venue": venue,
         "form": form,
@@ -291,7 +308,7 @@ def list_venues(request):
 
     # Set up pagination
     p = Paginator(Venue.objects.all(), 2)
-    page = request.GET.get('page')
+    page = request.GET.get("page")
     venues = p.get_page(page)
     nums = "a" * venues.paginator.num_pages
 
@@ -313,7 +330,7 @@ def add_venue(request):
             return HttpResponseRedirect("/add_venue?submitted=True")
     else:
         form = VenueForm
-        if 'submitted' in request.GET:
+        if "submitted" in request.GET:
             submitted = True
 
     return render(request, "events/add_venue.html", {
