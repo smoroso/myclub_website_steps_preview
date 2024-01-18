@@ -3,7 +3,7 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from django.http import HttpResponseRedirect
-from .models import Event, Venue, Star
+from .models import Event, Venue, Star, Booking
 from django.contrib.auth.models import User
 from .forms import VenueForm, EventForm, EventFormAdmin, GuestDetailForm, BusinessDetailForm, BookingDetailForm
 from django.http import HttpResponse
@@ -74,7 +74,24 @@ class BookingWizardView(SessionWizardView):
         booking = form_list[-1].save(commit=False)
         booking.guest = guest
         booking.save()
-        return HttpResponse("Form submitted!")
+        messages.success(request, ("Form submitted; Booking entry added"))
+        return redirect("list_bookings")
+
+# List Bookings
+def list_bookings(request):
+    booking_list = Booking.objects.all()
+
+    # Set up pagination
+    p = Paginator(Booking.objects.all(), 10)
+    page = request.GET.get("page")
+    bookings = p.get_page(page)
+    nums = "a" * bookings.paginator.num_pages
+
+    return render(request, "events/list_bookings.html", {
+        "booking_list": booking_list,
+        "bookings": bookings,
+        "nums": nums,
+    })
 
 
 # Add Star

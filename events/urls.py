@@ -28,4 +28,5 @@ urlpatterns = [
     path("list_stars", views.list_stars, name="list_stars"),
     path('add_contact/', ContactWizard.as_view([ContactForm1, ContactForm2]), name="add_contact"),
     path('add_booking/', views.BookingWizardView.as_view(), name="add_booking"),
+    path("list_bookings", views.list_bookings, name="list_bookings"),
 ]
