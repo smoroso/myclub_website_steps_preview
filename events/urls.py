@@ -27,4 +27,5 @@ urlpatterns = [
     path("add_star", views.StarFormPreview(StarForm), name="add_star"),
     path("list_stars", views.list_stars, name="list_stars"),
     path('contact/', ContactWizard.as_view([ContactForm1, ContactForm2]), name="contact"),
+    path('booking/', views.BookingWizardView.as_view(), name="booking"),
 ]

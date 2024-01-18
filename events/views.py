@@ -5,7 +5,7 @@ from datetime import datetime
 from django.http import HttpResponseRedirect
 from .models import Event, Venue, Star
 from django.contrib.auth.models import User
-from .forms import VenueForm, EventForm, EventFormAdmin
+from .forms import VenueForm, EventForm, EventFormAdmin, GuestDetailForm, BusinessDetailForm, BookingDetailForm
 from django.http import HttpResponse
 import csv
 from django.contrib import messages
@@ -23,6 +23,8 @@ from django.core.paginator import Paginator
 # Formtools
 from formtools.preview import FormPreview
 from formtools.wizard.views import SessionWizardView
+from formtools.wizard.views import SessionWizardView
+
 
 class ContactWizard(SessionWizardView):
     # form_template = "events/add_star.html" # Not Working
@@ -48,6 +50,31 @@ class ContactWizard(SessionWizardView):
         # })
 
         return redirect("list_stars")
+
+def show_business_form(wizard):
+    cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
+    return cleaned_data.get('is_business_guest')
+
+# Create your views here.
+class BookingWizardView(SessionWizardView):
+    form_list = [GuestDetailForm, BusinessDetailForm, BookingDetailForm]
+    template_name = 'events/add_booking.html'
+    condition_dict = {"1": show_business_form}
+
+    def done(self, form_list, **kwargs):
+        guest_form = form_list[0]
+        if guest_form.cleaned_data.get('is_business_guest'):
+            business = form_list[1].save()
+            guest = guest_form.save(commit=False)
+            guest.business = business
+            guest.save()
+        else:
+            guest = guest_form.save()
+
+        booking = form_list[-1].save(commit=False)
+        booking.guest = guest
+        booking.save()
+        return HttpResponse("Form submitted!")
 
 
 # Add Star
