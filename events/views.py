@@ -6,7 +6,6 @@ from django.http import HttpResponseRedirect
 from .models import Event, Venue, Star
 from django.contrib.auth.models import User
 from .forms import VenueForm, EventForm, EventFormAdmin
-from formtools.preview import FormPreview
 from django.http import HttpResponse
 import csv
 from django.contrib import messages
@@ -20,6 +19,35 @@ from reportlab.lib.pagesizes import letter
 
 # Import Pagination Stuff
 from django.core.paginator import Paginator
+
+# Formtools
+from formtools.preview import FormPreview
+from formtools.wizard.views import SessionWizardView
+
+class ContactWizard(SessionWizardView):
+    # form_template = "events/add_star.html" # Not Working
+    # preview_template = "events/add_star_preview.html" # Not Working
+    # SessionWizardView.form_template = "events/add_star.html" # Not Working
+    # SessionWizardView.preview_template = "events/add_star_preview.html" # Not Working
+    # Note: Cannot combine stepped form and preview but maybe a last 'step' could be the preview
+    template_name = "events/add_contact.html" # Works
+
+    def done(self, form_list, form_dict, **kwargs):
+        # 3 possibilities from tutorial (https://django-formtools.readthedocs.io/_/downloads/en/latest/pdf/)
+        # 1- Do something and redirect
+        # do_something_with_the_form_data(form_list)
+        # return HttpResponseRedirect('/page-to-redirect-to-when-done/')
+
+        # 2- Save form values
+        # user = form_dict['user'].save()
+        # credit_card = form_dict['credit_card'].save()
+
+        # 3- Display a page with form values
+        # return render(self.request, 'done.html', {
+        #     'form_data': [form.cleaned_data for form in form_list],
+        # })
+
+        return redirect("list_stars")
 
 
 # Add Star

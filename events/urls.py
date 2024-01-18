@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
-from .forms import StarForm
+from .forms import StarForm, ContactForm1, ContactForm2
+from .views import ContactWizard
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -25,4 +26,5 @@ urlpatterns = [
     path("show_event/<event_id>", views.show_event, name="show-event"),
     path("add_star", views.StarFormPreview(StarForm), name="add_star"),
     path("list_stars", views.list_stars, name="list_stars"),
+    path('contact/', ContactWizard.as_view([ContactForm1, ContactForm2]), name="contact"),
 ]
