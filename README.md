@@ -41,15 +41,12 @@ python manage.py runserver
 /add_star
 
 ## Django Formtools for Steps Form
-/add_contact
-/edit_contact
-/add_booking
-/update_booking
-  Use cases:
-    - Create someone with a business then update the night counts => WORKS
-    - Create someone with a business then update to remove the business => Flaky
-      Note: Does not really work because on next update business is preselected and value still exists
-    - Create somene without a business the update the night counts => WORKS
-    - Create somene without a business the update the night counts then add a business => WORKS
+/add_contact - Basic 2 steps form
+/add_booking - 2 or 3 steps form + save
+/update_booking - Use cases:
+  - Create someone with a business then update the night counts => WORKS
+  - Create someone with a business then update to remove the business => WORKS
+  - Create someone without a business then update the night counts => WORKS
+  - Create someone without a business then add a business => WORKS
 
 ## Both Steps and Preview
