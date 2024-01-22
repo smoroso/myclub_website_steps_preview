@@ -61,19 +61,7 @@ class BookingWizardView(SessionWizardView):
     template_name = 'events/add_booking.html'
     condition_dict = {"1": show_business_form}
 
-    # NOT WORKING
-    # def get_form_initial(self, step):
-    #     if 'booking_id' in self.kwargs:
-    #         return {}
-    #     return self.initial_dict.get(step, {})
-    # def get_form_instance(self, step):
-    #     if not self.instance_dict:
-    #         if 'booking_id' in self.kwargs:
-    #             booking_id = self.kwargs['booking_id']
-    #             return Booking.objects.get(id=booking_id)
-    #     return None
-
-    # WORKING - Use to set instance if we are updating existing ones
+    # Used to set instance if we are updating
     def get_form_instance(self, step):
         if 'booking_id' in self.kwargs:
             booking_id = self.kwargs['booking_id']
@@ -85,19 +73,15 @@ class BookingWizardView(SessionWizardView):
             if step == '2':
                 return  self.instance_dict.get(step, booking)
 
-    # Not working - Creates a new entry instead of updating
+    # Used for adding some values to instantiate the form on top of default instance
     def get_form_initial(self, step):
         if 'booking_id' in self.kwargs:
             booking_id = self.kwargs['booking_id']
             booking = Booking.objects.get(id=booking_id)
             if step == '0':
                 initial = self.initial_dict.get(step, {})
-                initial.update({'is_business_guest': hasattr(booking.guest, 'business')}, **model_to_dict(booking.guest))
+                initial.update({'is_business_guest': hasattr(booking.guest.business, 'name')}, **model_to_dict(booking.guest))
                 return initial
-            if step == '1':
-                return model_to_dict(booking.guest.business)
-            if step == '2':
-                return model_to_dict(booking)
         else:
             return self.initial_dict.get(step, {})
 

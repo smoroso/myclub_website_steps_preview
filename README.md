@@ -48,9 +48,8 @@ python manage.py runserver
   Use cases:
     - Create someone with a business then update the night counts => WORKS
     - Create someone with a business then update to remove the business => Flaky
-      Note: Does not really work becauyse on next update business is preselected and value still exists
+      Note: Does not really work because on next update business is preselected and value still exists
     - Create somene without a business the update the night counts => WORKS
-    - Create somene without a business the update the night counts then add a business => NOPE
-      Note: Adding a business says: 'NoneType' object has no attribute '_meta'
+    - Create somene without a business the update the night counts then add a business => WORKS
 
 ## Both Steps and Preview
