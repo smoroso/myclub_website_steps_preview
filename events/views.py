@@ -3,7 +3,7 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from django.http import HttpResponseRedirect
-from .models import Event, Venue, Star, Booking
+from .models import Event, Venue, Star, Booking, Business
 from django.contrib.auth.models import User
 from .forms import VenueForm, EventForm, EventFormAdmin, GuestDetailForm, BusinessDetailForm, BookingDetailForm
 from django.http import HttpResponse
@@ -87,13 +87,25 @@ class BookingWizardView(SessionWizardView):
 
     def done(self, form_list, **kwargs):
         guest_form = form_list[0]
+        guest = guest_form.save(commit=False)
+
+        print(not guest_form.cleaned_data.get('is_business_guest'))
+
         if guest_form.cleaned_data.get('is_business_guest'):
             business = form_list[1].save()
-            guest = guest_form.save(commit=False)
             guest.business = business
-            guest.save()
         else:
-            guest = guest_form.save()
+            if guest.business:
+                # guest.business.delete() # Nope `save() prohibited to prevent data loss due to unsaved related object 'business'.` -> parents deleted
+                # guest.business = Null # Nope `name 'Null' is not defined`
+                # del guest.business # Nope __delete__
+                # guest.business.delete(keep_parents=True) # Nope `save() prohibited to prevent data loss due to unsaved related object 'business'.` -> parents deleted
+                # Business.objects.get(id=guest.business_id).delete() # Nope `FOREIGN KEY constraint failed`
+                # Business.objects.get(id=guest.business_id).delete(keep_parents=True) # Nope `FOREIGN KEY constraint failed`
+                # delete guest.business # Nope `invalid syntax`
+                guest.business = None # Works, finally!
+
+        guest.save()
 
         booking = form_list[-1].save(commit=False)
         booking.guest = guest
