@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Venue, Event, Star, Guest, Business, Booking
+from .models import Venue, Event, Star, Guest, Business, Booking, Wish
 
 class GuestDetailForm(forms.ModelForm):
     BOOL_CHOICES = [(True, 'Yes'), (False, 'No')]
@@ -107,3 +107,12 @@ class VenueForm(ModelForm):
             "web": forms.TextInput(attrs={"class": "form-control", "placeholder": "Venue Website URL"}),
             "email_address": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Venue Email Address"}),
         }
+
+class WishForm(ModelForm):
+    name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Your full name...'}))
+    email = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Your email...'}))
+    phoneNumber = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Your phone number...'}))
+
+    class Meta:
+        model = Wish
+        fields = '__all__'

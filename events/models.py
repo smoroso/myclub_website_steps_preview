@@ -106,3 +106,20 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.guest.full_name}: {self.number_of_nights} nights in {self.room_type} room"
+
+class Wish(models.Model):
+    regChoice = (
+        ('Self', 'Self'),
+        ('Group', 'Group'),
+        ('Corporate', 'Corporate'),
+        ('Others', 'Others'),
+    )
+    name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=254,null=True)
+    phoneNumber =  models.CharField(max_length=15,null=True)
+    idCard = models.ImageField(null=True)
+    regType = models.CharField(max_length=25, choices=regChoice,null=True)
+    ticketNo = models.IntegerField(default=1)
+
+    def __str__(self):
+        return self.name

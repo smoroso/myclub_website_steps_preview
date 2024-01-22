@@ -1,0 +1,26 @@
+{% extends "events/base.html" %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<center>
+    <h1>Add Wish</h1>
+    <br/><br/>
+    <form id="login-form" method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.name}}
+        {{form.email}}
+        {{form.phoneNumber}}
+        <legend style="color: aliceblue;">Upload ID card: </legend>{{form.idCard}}
+        <div style="text-align: center; color: aliceblue;">Registration Type: {{form.regType}}</div>
+        {{form.ticketNo}}
+        <input class="btn btn-sm btn-primary" type="submit" value="Register" name="Register">
+    </form>
+</center>
+{% else %}
+    <h1>Sorry! You Must Be Logged In To View This Page...</h1>
+
+    <a href="{% url 'login' %}">Login Here</a>
+{% endif %}
+
+{% endblock %}

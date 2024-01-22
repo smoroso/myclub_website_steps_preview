@@ -37,10 +37,13 @@ python manage.py runserver
 ```
 
 # Content
-## Django Formtools for Preview Form
-/add_star
+## Django Preview Form Vanilla
+/add_wish - basic preview after save https://stackoverflow.com/questions/61998149/form-preview-in-django
 
-## Django Formtools for Steps Form
+## Django Formtools for (Preview Form)[https://django-formtools.readthedocs.io/en/latest/preview.html]
+/add_star - using Django Formtools Preview functionality
+
+## Django Formtools for (Steps Form)[https://django-formtools.readthedocs.io/en/latest/wizard.html]
 /add_contact - Basic 2 steps form
 /add_booking - 2 or 3 steps form + save
 /update_booking - Use cases:

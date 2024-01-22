@@ -3,9 +3,9 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from django.http import HttpResponseRedirect
-from .models import Event, Venue, Star, Booking, Business
+from .models import Event, Venue, Star, Booking, Business, Wish
 from django.contrib.auth.models import User
-from .forms import VenueForm, EventForm, EventFormAdmin, GuestDetailForm, BusinessDetailForm, BookingDetailForm
+from .forms import VenueForm, EventForm, EventFormAdmin, GuestDetailForm, BusinessDetailForm, BookingDetailForm, WishForm
 from django.http import HttpResponse
 import csv
 from django.contrib import messages
@@ -150,6 +150,28 @@ def list_stars(request):
         "stars": stars,
         "nums": nums,
     })
+
+
+def add_wish(request):
+    form = WishForm()
+    if request.method == 'POST':
+        form = WishForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save()
+            return redirect('preview_wish_postsave', pk=instance.id)
+    context = {'form':form}
+    return render(request, 'events/add_wish.html', context)
+
+def preview_wish_postsave(request, pk):
+    reg = Wish.objects.get(id=pk)
+    prev = WishForm(instance=reg)
+    if request.method == 'POST':
+        form = WishForm(request.POST, instance=reg)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    context = {'reg':reg, 'prev':prev}
+    return render(request, 'events/preview_wish_postsave.html', context)
 
 # Show Event
 def show_event(request, event_id):
