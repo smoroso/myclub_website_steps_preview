@@ -29,4 +29,5 @@ urlpatterns = [
     path('add_contact/', ContactWizard.as_view([ContactForm1, ContactForm2]), name="add_contact"),
     path('add_booking/', views.BookingWizardView.as_view(), name="add_booking"),
     path("list_bookings", views.list_bookings, name="list_bookings"),
+    path('update_booking/<booking_id>', views.BookingWizardView.as_view(), name="update_booking"),
 ]

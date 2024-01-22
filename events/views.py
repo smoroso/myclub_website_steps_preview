@@ -23,7 +23,7 @@ from django.core.paginator import Paginator
 # Formtools
 from formtools.preview import FormPreview
 from formtools.wizard.views import SessionWizardView
-from formtools.wizard.views import SessionWizardView
+from django.forms.models import model_to_dict
 
 
 class ContactWizard(SessionWizardView):
@@ -61,6 +61,46 @@ class BookingWizardView(SessionWizardView):
     template_name = 'events/add_booking.html'
     condition_dict = {"1": show_business_form}
 
+    # NOT WORKING
+    # def get_form_initial(self, step):
+    #     if 'booking_id' in self.kwargs:
+    #         return {}
+    #     return self.initial_dict.get(step, {})
+    # def get_form_instance(self, step):
+    #     if not self.instance_dict:
+    #         if 'booking_id' in self.kwargs:
+    #             booking_id = self.kwargs['booking_id']
+    #             return Booking.objects.get(id=booking_id)
+    #     return None
+
+    # WORKING - Use to set instance if we are updating existing ones
+    def get_form_instance(self, step):
+        if 'booking_id' in self.kwargs:
+            booking_id = self.kwargs['booking_id']
+            booking = Booking.objects.get(id=booking_id)
+            if step == '0':
+                return self.instance_dict.get(step, booking.guest)
+            if step == '1':
+                return  self.instance_dict.get(step, booking.guest.business)
+            if step == '2':
+                return  self.instance_dict.get(step, booking)
+
+    # Not working - Creates a new entry instead of updating
+    def get_form_initial(self, step):
+        if 'booking_id' in self.kwargs:
+            booking_id = self.kwargs['booking_id']
+            booking = Booking.objects.get(id=booking_id)
+            if step == '0':
+                initial = self.initial_dict.get(step, {})
+                initial.update({'is_business_guest': hasattr(booking.guest, 'business')}, **model_to_dict(booking.guest))
+                return initial
+            if step == '1':
+                return model_to_dict(booking.guest.business)
+            if step == '2':
+                return model_to_dict(booking)
+        else:
+            return self.initial_dict.get(step, {})
+
     def done(self, form_list, **kwargs):
         guest_form = form_list[0]
         if guest_form.cleaned_data.get('is_business_guest'):
@@ -74,7 +114,11 @@ class BookingWizardView(SessionWizardView):
         booking = form_list[-1].save(commit=False)
         booking.guest = guest
         booking.save()
-        messages.success(request, ("Form submitted; Booking entry added"))
+
+        if 'booking_id' in self.kwargs:
+            messages.success(self.request, ("Form submitted; Booking entry updated"))
+        else:
+            messages.success(self.request, ("Form submitted; Booking entry added"))
         return redirect("list_bookings")
 
 # List Bookings

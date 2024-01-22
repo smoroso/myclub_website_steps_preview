@@ -3,13 +3,18 @@
 {% block content %}
 
 <center>
-  <h1>bookings...</h1>
+  <h1>
+    Bookings... <a href="{% url 'add_booking' %}" class="btn btn-outline-primary btn-sm">Add Booking</a>
+  </h1>
 
   <table class="table table-bordered table-hover table-striped">
-    {% for star in bookings %}
+    {% for booking in bookings %}
     <tr>
       <td>
-        {{ star }}
+        {{ booking }} - {{booking.guest.business}}
+      </td>
+      <td>
+          <a href="{% url 'update_booking' booking.id %}" class="btn btn-outline-secondary btn-sm">Update Booking</a>
       </td>
     </tr>
     {% endfor %}
