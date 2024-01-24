@@ -5,7 +5,8 @@ from .views import ContactWizard
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path("<int:year>/<str:month>/", views.home, name="home"),
+    path("current_month", views.current_month, name="current_month"),
+    path("<int:year>/<str:month>/", views.current_month, name="current_month"),
     path("events", views.all_events, name="list-events"),
     path("add_venue", views.add_venue, name="add-venue"),
     path("list_venues", views.list_venues, name="list-venues"),

@@ -1,3 +1,7 @@
+{% extends "events/base.html" %}
+
+{% block content %}
+
 <h1>Reg</h1>
 Hello {{reg.name}}, <br/>
 your email is {{reg.email}} <br/>
@@ -13,3 +17,5 @@ your phone number is {{prev.phoneNumber}} <br/>
 your idCard photo is <img src="{{ prev.idCard.url }}" alt="idCard Image" width="480"> <br/>
 your registration type is {{prev.regType}} <br/>
 your number of tickets is {{prev.ticketNo}} <br/>
+
+{% endblock %}

@@ -225,7 +225,7 @@ def admin_approval(request):
             })
     else:
         messages.success(request, ("You aren't authorized to view this page"))
-        return redirect("home")
+        return redirect("current_month")
     return render(request, "events/admin_approval.html", {})
 
 
@@ -240,7 +240,7 @@ def my_events(request):
         })
     else:
         messages.success(request, ("You aren't authorized to View this page"))
-        return redirect("home")
+        return redirect("current_month")
 
 # Generate a PDF File Venue List
 def venue_pdf(request):
@@ -471,7 +471,7 @@ def all_events(request):
     })
 
 
-def home(request, year=datetime.now().year, month=datetime.now().strftime("%B")):
+def current_month(request, year=datetime.now().year, month=datetime.now().strftime("%B")):
     month = month.capitalize()
     # Convert month from name to number
     month_number = list(calendar.month_name).index(month)
@@ -493,7 +493,7 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime("%B"))
     # Get current time
     time = now.strftime("%I:%M:%S %p")
 
-    return render(request, "events/home.html", {
+    return render(request, "events/current_month.html", {
         "year": year,
         "month": month,
         "month_number": month_number,
@@ -502,3 +502,7 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime("%B"))
         "time": time,
         "event_list": event_list,
     })
+
+
+def home(request):
+    return render(request, "events/home.html", {})
