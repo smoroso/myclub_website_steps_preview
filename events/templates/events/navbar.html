@@ -106,6 +106,9 @@
                         {% endif %}
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'add_tour' %}">Add Tour</a>
+                </li>
                 {% if user.is_authenticated %}
                     {% if user.is_superuser %}
                         <li class="nav-item">

@@ -53,3 +53,4 @@ python manage.py runserver
   - Create someone without a business then add a business => WORKS
 
 ## Both Steps and Preview
+/add_tour - 3 steps form + 4th step as a preview

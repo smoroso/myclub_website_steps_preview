@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Venue, MyClubUser, Event, Star, Business, Guest, Booking, Wish
+from .models import Venue, MyClubUser, Event, Star, Business, Guest, Booking, Wish, Artist, Contact, Tour
 from django.contrib.auth.models import Group
 
 # admin.site.register(Venue)
@@ -12,6 +12,9 @@ admin.site.register(Business)
 admin.site.register(Guest)
 admin.site.register(Booking)
 admin.site.register(Wish)
+admin.site.register(Artist)
+admin.site.register(Contact)
+admin.site.register(Tour)
 
 @admin.register(Venue)
 class VenueAdmin(admin.ModelAdmin):

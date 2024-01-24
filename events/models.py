@@ -16,6 +16,28 @@ class Star(models.Model):
     def __str__(self):
         return self.full_name
 
+
+class Artist(models.Model):
+    first_name = models.CharField('First Name', max_length=120)
+    last_name = models.CharField('Last Name', max_length=120)
+
+    def __str__(self):
+        return self.name
+
+class Tour(models.Model):
+    name = models.CharField('First Name', max_length=120)
+
+    def __str__(self):
+        return self.name
+
+class Contact(models.Model):
+    subject = models.CharField('First Name', max_length=120)
+    email = models.EmailField('Email Adress', blank=True)
+    message = models.TextField('Message')
+
+    def __str__(self):
+        return self.subject
+
 class Venue(models.Model):
     name = models.CharField('Venue Name', max_length=120)
     address = models.CharField(max_length=300)

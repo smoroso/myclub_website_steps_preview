@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Venue, Event, Star, Guest, Business, Booking, Wish
+from .models import Venue, Event, Star, Guest, Business, Booking, Wish, Artist, Tour, Contact
 
 class GuestDetailForm(forms.ModelForm):
     BOOL_CHOICES = [(True, 'Yes'), (False, 'No')]
@@ -26,6 +26,29 @@ class BookingDetailForm(forms.ModelForm):
         fields = ('room_type', 'date', 'number_of_nights')
         widgets = {'date': forms.DateInput(attrs={'type': 'date'})}
 
+class ArtistDetailForm(forms.ModelForm):
+    class Meta:
+        model = Artist
+        fields = ('first_name', 'last_name')
+
+
+class TourDetailForm(forms.ModelForm):
+    class Meta:
+        model = Tour
+        fields = ('name',)
+
+
+class ContactDetailForm(forms.ModelForm):
+    subject = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = Contact
+        fields = ('subject', 'email', 'message')
+
+class PreviewForm(forms.Form):
+    done = forms.BooleanField(required=False)
 
 class ContactForm1(forms.Form):
     subject = forms.CharField(max_length=100)

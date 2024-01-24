@@ -5,7 +5,7 @@ from datetime import datetime
 from django.http import HttpResponseRedirect
 from .models import Event, Venue, Star, Booking, Business, Wish
 from django.contrib.auth.models import User
-from .forms import VenueForm, EventForm, EventFormAdmin, GuestDetailForm, BusinessDetailForm, BookingDetailForm, WishForm
+from .forms import VenueForm, EventForm, EventFormAdmin, GuestDetailForm, BusinessDetailForm, BookingDetailForm, WishForm, ArtistDetailForm, TourDetailForm, ContactDetailForm, PreviewForm
 from django.http import HttpResponse
 import csv
 from django.contrib import messages
@@ -124,6 +124,48 @@ def list_bookings(request):
         "nums": nums,
     })
 
+
+# Create your views here.
+class TourWizardView(SessionWizardView):
+    form_list = [ArtistDetailForm, TourDetailForm, ContactDetailForm, PreviewForm]
+    template_name = 'events/add_tour.html'
+
+    # Used to set instance if we are updating
+    # def get_form_instance(self, step):
+    #     if 'booking_id' in self.kwargs:
+    #         booking_id = self.kwargs['booking_id']
+    #         booking = Booking.objects.get(id=booking_id)
+    #         if step == '0':
+    #             return self.instance_dict.get(step, booking.guest)
+    #         if step == '1':
+    #             return  self.instance_dict.get(step, booking.guest.business)
+    #         if step == '2':
+    #             return  self.instance_dict.get(step, booking)
+
+    # # Used for adding some values to instantiate the form on top of default instance
+    # def get_form_initial(self, step):
+    #     if 'booking_id' in self.kwargs:
+    #         booking_id = self.kwargs['booking_id']
+    #         booking = Booking.objects.get(id=booking_id)
+    #         if step == '0':
+    #             initial = self.initial_dict.get(step, {})
+    #             initial.update({'is_business_guest': hasattr(booking.guest.business, 'name')}, **model_to_dict(booking.guest))
+    #             return initial
+    #     else:
+    #         return self.initial_dict.get(step, {})
+
+    def get_context_data(self, form, **kwargs):
+        context = super().get_context_data(form=form, **kwargs)
+        context['preview'] = self.get_all_cleaned_data()
+        return context
+
+    def done(self, form_list, **kwargs):
+        form_list[0].save()
+        form_list[1].save()
+        form_list[2].save()
+
+        messages.success(self.request, ("Form submitted; Tour entry added"))
+        return redirect("list_bookings")
 
 # Add Star
 class StarFormPreview(FormPreview):
