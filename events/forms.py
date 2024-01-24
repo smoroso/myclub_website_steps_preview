@@ -35,17 +35,16 @@ class ArtistDetailForm(forms.ModelForm):
 class TourDetailForm(forms.ModelForm):
     class Meta:
         model = Tour
-        fields = ('name',)
+        fields = ('name', 'description', 'departure_date', 'arrival_date')
 
 
 class ContactDetailForm(forms.ModelForm):
     subject = forms.CharField(max_length=100)
-    email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         model = Contact
-        fields = ('subject', 'email', 'message')
+        fields = ('subject', 'message')
 
 class PreviewForm(forms.Form):
     done = forms.BooleanField(required=False)

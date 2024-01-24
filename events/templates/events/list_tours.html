@@ -14,7 +14,7 @@
         {{ tour }}
       </td>
       <td>
-          Update tour
+        <a href="{% url 'update_tour' tour.id %}" class="btn btn-outline-secondary btn-sm">Update tour</a>
       </td>
     </tr>
     {% endfor %}

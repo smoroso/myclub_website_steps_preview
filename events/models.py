@@ -22,21 +22,25 @@ class Artist(models.Model):
     last_name = models.CharField('Last Name', max_length=120)
 
     def __str__(self):
-        return self.name
-
-class Tour(models.Model):
-    name = models.CharField('First Name', max_length=120)
-
-    def __str__(self):
-        return self.name
+        return self.first_name
 
 class Contact(models.Model):
-    subject = models.CharField('First Name', max_length=120)
-    email = models.EmailField('Email Adress', blank=True)
+    subject = models.CharField('Subject', max_length=120)
     message = models.TextField('Message')
 
     def __str__(self):
         return self.subject
+
+class Tour(models.Model):
+    name = models.CharField('Tour summary', max_length=120)
+    description = models.TextField('Description', max_length=120, null=True)
+    departure_date = models.DateTimeField('Departure Date', default=date.today())
+    arrival_date = models.DateTimeField('Arrival Date', default=date.today())
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, blank=True, null=True)
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 class Venue(models.Model):
     name = models.CharField('Venue Name', max_length=120)
@@ -50,7 +54,6 @@ class Venue(models.Model):
 
     def __str__(self):
         return self.name
-
 
 
 class MyClubUser(models.Model):

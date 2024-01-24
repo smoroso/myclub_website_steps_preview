@@ -35,4 +35,5 @@ urlpatterns = [
     path("preview_wish_postsave/<str:pk>", views.preview_wish_postsave, name="preview_wish_postsave"),
     path('add_tour/', views.TourWizardView.as_view(), name="add_tour"),
     path("list_tours", views.list_tours, name="list_tours"),
+    path('update_tour/<tour_id>', views.TourWizardView.as_view(), name="update_tour"),
 ]

@@ -131,28 +131,16 @@ class TourWizardView(SessionWizardView):
     template_name = 'events/add_tour.html'
 
     # Used to set instance if we are updating
-    # def get_form_instance(self, step):
-    #     if 'booking_id' in self.kwargs:
-    #         booking_id = self.kwargs['booking_id']
-    #         booking = Booking.objects.get(id=booking_id)
-    #         if step == '0':
-    #             return self.instance_dict.get(step, booking.guest)
-    #         if step == '1':
-    #             return  self.instance_dict.get(step, booking.guest.business)
-    #         if step == '2':
-    #             return  self.instance_dict.get(step, booking)
-
-    # # Used for adding some values to instantiate the form on top of default instance
-    # def get_form_initial(self, step):
-    #     if 'booking_id' in self.kwargs:
-    #         booking_id = self.kwargs['booking_id']
-    #         booking = Booking.objects.get(id=booking_id)
-    #         if step == '0':
-    #             initial = self.initial_dict.get(step, {})
-    #             initial.update({'is_business_guest': hasattr(booking.guest.business, 'name')}, **model_to_dict(booking.guest))
-    #             return initial
-    #     else:
-    #         return self.initial_dict.get(step, {})
+    def get_form_instance(self, step):
+        if 'tour_id' in self.kwargs:
+            tour_id = self.kwargs['tour_id']
+            tour = Tour.objects.get(id=tour_id)
+            if step == '0':
+                return self.instance_dict.get(step, tour.artist)
+            if step == '1':
+                return  self.instance_dict.get(step, tour)
+            if step == '2':
+                return  self.instance_dict.get(step, tour.contact)
 
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form=form, **kwargs)
@@ -160,12 +148,22 @@ class TourWizardView(SessionWizardView):
         return context
 
     def done(self, form_list, **kwargs):
-        form_list[0].save()
-        form_list[1].save()
-        form_list[2].save()
+        artist_form = form_list[0]
+        tour_form = form_list[1]
+        contact_form = form_list[2]
 
-        messages.success(self.request, ("Form submitted; Tour entry added"))
-        return redirect("list_bookings")
+        artist = artist_form.save()
+        contact = contact_form.save()
+        tour = tour_form.save(commit=False)
+        tour.artist = artist
+        tour.contact = contact
+        tour.save()
+
+        if 'booking_id' in self.kwargs:
+            messages.success(self.request, ("Form submitted; Tour entry updated"))
+        else:
+            messages.success(self.request, ("Form submitted; Tour entry added"))
+        return redirect("list_tours")
 
 # List Tours
 def list_tours(request):
