@@ -30,12 +30,32 @@ class ArtistDetailForm(forms.ModelForm):
     class Meta:
         model = Artist
         fields = ('first_name', 'last_name')
+        labels = {
+            "first_name": "First Name",
+            "last_name": "Last Name",
+        }
+        widgets = {
+            "first_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "First Name"}),
+            "last_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Last Name"}),
+        }
 
 
 class TourDetailForm(forms.ModelForm):
     class Meta:
         model = Tour
         fields = ('name', 'description', 'departure_date', 'arrival_date')
+        labels = {
+            "name": "Tour Name",
+            "message": "Tour Description",
+            "departure_date": "Departure Date",
+            "arrival_date": "Arrival Date",
+        }
+        widgets = {
+            "subject": forms.TextInput(attrs={"class": "form-control", "placeholder": "Tour Name"}),
+            "message": forms.Textarea(attrs={"class": "form-control", "placeholder": "Tour Description"}),
+            "departure_date": forms.DateInput(attrs={'type': 'date'}),
+            "arrival_date": forms.DateInput(attrs={'type': 'date'}),
+        }
 
 
 class ContactDetailForm(forms.ModelForm):
@@ -45,9 +65,17 @@ class ContactDetailForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ('subject', 'message')
+        labels = {
+            "subject": "Announce title",
+            "message": "Tour Summary",
+        }
+        widgets = {
+            "subject": forms.TextInput(attrs={"class": "form-control", "placeholder": "Announce title"}),
+            "message": forms.Textarea(attrs={"class": "form-control", "placeholder": "Tour Summary"}),
+        }
 
 class PreviewForm(forms.Form):
-    done = forms.BooleanField(required=False)
+    done = forms.BooleanField(required=False) # Not doing anything with this guy, on purpose
 
 class ContactForm1(forms.Form):
     subject = forms.CharField(max_length=100)

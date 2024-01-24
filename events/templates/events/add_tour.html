@@ -7,25 +7,26 @@
 {% endblock %}
 
 {% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ wizard.management_form }}
 
-    <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
-    <form action="" method="post">{% csrf_token %}
         {% if wizard.steps.current != wizard.steps.last %}
+            <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count|add:"-1" }}</p>
             <table>
-                {{ wizard.management_form }}
-                {% if wizard.form.forms %}
-                    {{ wizard.form.management_form }}
-                    {% for form in wizard.form.forms %}
-                        {{ form.as_table }}
-                    {% endfor %}
-                {% else %}
-                    {{ wizard.form }}
-                {% endif %}
+                <!-- {% for field in wizard.form %}
+                    {{ field.as_p }}
+                    <p>
+                        {{ field.label_tag }}<br/>
+                        {{ field }}
+                        {{ field.widget_type }}
+                    </p>
+                {% endfor %} -->
+                {{ wizard.form.as_table }}
             </table>
         {% else %}
             <h1>Preview</h1>
             <table>
-                {{ wizard.management_form }}
                 {% for field, value in preview.items %}
                 <tr>
                     <th>{{ field }}:</th>
@@ -34,13 +35,21 @@
                 {% endfor %}
             </table>
         {% endif %}
+        <br/><br/><br/>
 
-        {% if wizard.steps.prev %}
-            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% translate "first step" %}</button>
-            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% translate "prev step" %}</button>
+        {% if wizard.steps.current != wizard.steps.first and wizard.steps.current != '1' %}
+            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}" class="btn btn-secondary">{% translate "First" %}</button>
         {% endif %}
 
-        <input type="submit" value="{% translate " submit" %}" />
+        {% if wizard.steps.prev %}
+            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn btn-secondary">{% translate "Previous" %}</button>
+        {% endif %}
+
+        {% if wizard.steps.current != wizard.steps.last %}
+            <input type="submit" value="{% translate "Next" %}" class="btn btn-secondary" />
+        {% else %}
+            <input type="submit" value="{% translate "Submit" %}" class="btn btn-primary" />
+        {% endif %}
     </form>
 
 {% endblock %}
