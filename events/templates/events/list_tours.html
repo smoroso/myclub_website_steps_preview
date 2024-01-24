@@ -1,0 +1,53 @@
+{% extends "events/base.html" %}
+
+{% block content %}
+
+<center>
+  <h1>
+    Tours... <a href="{% url 'add_tour' %}" class="btn btn-outline-primary btn-sm">Add tour</a>
+  </h1>
+
+  <table class="table table-bordered table-hover table-striped">
+    {% for tour in tours %}
+    <tr>
+      <td>
+        {{ tour }}
+      </td>
+      <td>
+          Update tour
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <br/><br/>
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      {% if tours.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1">&laquo First</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ tours.previous_page_number }}">Previous</a>
+        </li>
+      {% endif %}
+
+      {% for page in tours.paginator.page_range %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+        </li>
+      {% endfor %}
+
+      {% if tours.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ tours.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ tours.paginator.num_pages }}">&raquo Last</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+</center>
+
+{% endblock %}

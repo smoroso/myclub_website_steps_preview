@@ -3,7 +3,7 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from django.http import HttpResponseRedirect
-from .models import Event, Venue, Star, Booking, Business, Wish
+from .models import Event, Venue, Star, Booking, Business, Wish, Tour
 from django.contrib.auth.models import User
 from .forms import VenueForm, EventForm, EventFormAdmin, GuestDetailForm, BusinessDetailForm, BookingDetailForm, WishForm, ArtistDetailForm, TourDetailForm, ContactDetailForm, PreviewForm
 from django.http import HttpResponse
@@ -166,6 +166,22 @@ class TourWizardView(SessionWizardView):
 
         messages.success(self.request, ("Form submitted; Tour entry added"))
         return redirect("list_bookings")
+
+# List Tours
+def list_tours(request):
+    tour_list = Tour.objects.all()
+
+    # Set up pagination
+    p = Paginator(tour_list, 10)
+    page = request.GET.get("page")
+    tours = p.get_page(page)
+    nums = "a" * tours.paginator.num_pages
+
+    return render(request, "events/list_tours.html", {
+        "tour_list": tour_list,
+        "tours": tours,
+        "nums": nums,
+    })
 
 # Add Star
 class StarFormPreview(FormPreview):
