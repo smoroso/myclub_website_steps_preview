@@ -19,6 +19,7 @@ pip install -r requirements.txt
 
 ### Best Practices: Requirements
 [Requirements - Best practices](https://stackoverflow.com/questions/61536466/pips-requirements-txt-best-practice)
+After creating requirements.in: `echo "django==5.0.1" > requirements.in`
 ```shell
 source venv/bin/activate
 python -m pip install pip-tools
