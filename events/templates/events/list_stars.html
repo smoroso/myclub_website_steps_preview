@@ -11,6 +11,9 @@
       <td>
         {{ star }}
       </td>
+      <td>
+        <a href="{% url 'update_star' star.id %}" class="btn btn-outline-secondary btn-sm">Update</a>
+      </td>
     </tr>
     {% endfor %}
   </table>

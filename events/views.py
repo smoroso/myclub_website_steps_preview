@@ -25,6 +25,9 @@ from formtools.preview import FormPreview
 from formtools.wizard.views import SessionWizardView
 from django.forms.models import model_to_dict
 
+# Regexp
+import re
+
 
 class ContactWizard(SessionWizardView):
     # form_template = "events/add_star.html" # Not Working
@@ -159,6 +162,10 @@ class TourWizardView(SessionWizardView):
         tour.contact = contact
         tour.save()
 
+        # Note: differences between
+        # self.get_cleaned_data_for_step('0') => {'first_name': 'Uma', 'last_name': 'Turman'}
+        # self.get_form('0').changed_data => []
+
         if 'booking_id' in self.kwargs:
             messages.success(self.request, ("Form submitted; Tour entry updated"))
         else:
@@ -182,13 +189,29 @@ def list_tours(request):
     })
 
 # Add Star
-class StarFormPreview(FormPreview):
+class StarCreateFormPreview(FormPreview):
     form_template = "events/add_star.html"
     preview_template = "events/add_star_preview.html"
 
     def done(self, request, cleaned_data):
         Star.objects.create(**cleaned_data)
         messages.success(request, ("Form submitted; Star entry added"))
+        return redirect("list_stars")
+
+# Update Star
+class StarUpdateFormPreview(FormPreview):
+    form_template = "events/add_star.html"
+    preview_template = "events/add_star_preview.html"
+
+    def get_initial(self, request, *args, **kwargs):
+        id = re.findall('update.+/(\d+)', request.path)[0]
+        star = Star.objects.get(id=id)
+        return model_to_dict(star)
+
+    def done(self, request, cleaned_data):
+        id = re.findall('update.+/(\d+)', request.path)[0]
+        Star.objects.filter(id=id).update(**cleaned_data)
+        messages.success(request, ("Form submitted; Star entry updated"))
         return redirect("list_stars")
 
 # List Stars

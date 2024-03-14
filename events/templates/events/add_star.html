@@ -6,13 +6,15 @@
 {% if form.errors %}<h1>{% translate "Please correct the following errors" %}</h1>
 {% else %}<h1>{% translate "Submit" %}</h1>{% endif %}
 
+<a href="{{request.META.HTTP_REFERER}}" class="btn btn-outline-secondary btn-sm">Go back</a>
+<br/>
 
 <form action="" method=POST enctype="multipart/form-data">
     {% csrf_token %}
 
     {{ form.as_p }}
     <input type="hidden" name="{{ stage_field }}" value="1" />
-    <input type="submit" value="{% translate ' Preview' %}" class="btn btn-secondary"/>
+    <input type="submit" value="{% translate 'Preview' %}" class="btn btn-secondary"/>
 </form>
 
 {% endblock %}
